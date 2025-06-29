@@ -105,14 +105,26 @@ function errorInput(input, message) {
 }
 
 
+ document.getElementById("registro-form").addEventListener("submit", function (e) {
+    e.preventDefault(); 
 
-// Function to save user data in localStorage
-function saveUserData() {
-    const userData = {
-        username: usename.value,
-        email: email.value,
-        password: password.value
-    };
+    const formularioCorreto = document.querySelectorAll(".input-box.error").length === 0;
 
-    localStorage.setItem('usuarioRegistrado', JSON.stringify(userData));
-}
+    if (formularioCorreto== false) {
+      // Redirecionar para a página de login
+      alert("preencha os dados certo")// ou "login.php", dependendo do seu sistema
+    } else if (formularioCorreto == true) {
+ 
+       window.location.href = "login.html"; // Redirecionar para a página de sucesso
+    }
+  });
+
+  const novoUsuario = {
+  email: document.getElementById("email").value.trim(),
+  senha: document.getElementById("password").value,
+};
+
+// Salvar no localStorage como JSON
+localStorage.setItem("usuarioRegistrado", JSON.stringify(novoUsuario));
+
+
