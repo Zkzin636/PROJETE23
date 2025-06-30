@@ -104,25 +104,43 @@ function errorInput(input, message) {
     formItem.className = 'input-box error';
 }
 
+if (form) {
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        sucessesForm();
 
- document.getElementById("registro-form").addEventListener("submit", function (e) {
-    e.preventDefault(); 
+        const isValid = [...form.querySelectorAll('.input-box')].every(item => item.className === 'input-box');
 
-    const formularioCorreto = document.querySelectorAll(".input-box.error").length === 0;
+        if (isValid) {
+            const usuario = usename.value;
+            const userEmail = email.value;
+            const userSenha = password.value;
 
-    if (formularioCorreto== false) {
-      // Redirecionar para a página de login
-      alert("preencha os dados certo")// ou "login.php", dependendo do seu sistema
-    } else if (formularioCorreto == true) {
- 
-       window.location.href = "login.html"; // Redirecionar para a página de sucesso
-    }
-  });
+            // Obter usuários existentes
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
 
-  const novoUsuario = {
-  email: document.getElementById("email").value.trim(),
-  senha: document.getElementById("password").value,
-};
+            // Verificar se o e-mail já foi cadastrado
+            const existe = usuarios.find(user => user.email === userEmail);
+
+            if (existe) {
+                alert('Email já cadastrado!');
+                return;
+            }
+
+            // Salvar novo usuário
+            usuarios.push({
+                usuario,
+                email: userEmail,
+                senha: userSenha
+            });
+
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            alert('Registro realizado com sucesso!');
+            window.location.href = 'login.html';
+        }
+    });
+}
+
 
 // Salvar no localStorage como JSON
 localStorage.setItem("usuarioRegistrado", JSON.stringify(novoUsuario));
