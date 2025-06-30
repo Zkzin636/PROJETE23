@@ -1,27 +1,24 @@
+// Espera o carregamento da página e adiciona o listener no formulário
+document.getElementById("login-form").addEventListener("submit", logar);
 
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("login-form");
+function logar(event){
+    event.preventDefault(); // Impede o envio padrão do formulário
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+    var usuario = document.getElementById("usuario").value;
+    var senha = document.getElementById("senha").value;
 
-    const email = document.getElementById("usuario").value.trim();
-    const senha = document.getElementById("senha").value;
+    // Busca os usuários registrados
+    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
 
-    const dados = localStorage.getItem("usuarioRegistrado");
+    // Procura usuário com email ou nome de usuário e senha correspondentes
+    const usuarioValido = usuarios.find(user => 
+        (user.email === usuario || user.usuario === usuario) && user.senha === senha
+    );
 
-    if (!dados) {
-      alert("Nenhuma conta encontrada. Registre-se primeiro.");
-      return;
-    }
-
-    const usuario = JSON.parse(dados);
-
-    if (email === usuario.email && senha === usuario.senha) {
-      alert("Login realizado com sucesso!");
-      window.location.href = "pagina-principal.html";
+    if (usuarioValido) {
+        alert("Login realizado com sucesso!");
+        window.location.href = "index.html";
     } else {
-      alert("Email ou senha incorretos.");
+        alert("Usuário ou senha incorretos!");
     }
-  });
-});
+}
